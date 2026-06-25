@@ -255,7 +255,18 @@
             margin-bottom: 8px;
         }
 
-    </style>
+    
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-bottom:20px}
+.stat-card{background:#f8f9fa;border:1px solid #ddd;padding:15px;border-radius:8px}
+.circular-wrap{display:flex;justify-content:center}
+.circular-progress{width:120px;height:120px;border-radius:50%;
+background:conic-gradient(#4CAF50 0deg,#e0e0e0 0deg);display:flex;align-items:center;justify-content:center;font-weight:bold}
+.circular-progress span{background:white;width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.topic-progress{margin:8px 0}
+.topic-progress-bar{height:12px;background:#e0e0e0;border-radius:6px;overflow:hidden}
+.topic-progress-fill{height:100%;background:#4CAF50}
+
+</style>
 </head>
 <body>
 
@@ -301,7 +312,34 @@
 
         <div id="random-question-display" class="random-box"></div>
 
-        <div id="content"></div>
+        <div id="progressContainer" style="margin-bottom:20px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <strong>Overall Progress</strong>
+                <span id="progressText">0%</span>
+            </div>
+            <div style="width:100%;height:24px;background:#e0e0e0;border-radius:12px;overflow:hidden;">
+                <div id="progressBar" style="height:100%;width:0%;background:#4CAF50;transition:width 0.3s;"></div>
+            </div>
+        </div>
+
+
+        
+<div id="advancedStats" class="stats-grid">
+ <div class="stat-card">
+   <h3>Status Summary</h3>
+   <div id="statusCounts"></div>
+ </div>
+ <div class="stat-card">
+   <h3>Difficulty Progress</h3>
+   <div id="difficultyStats"></div>
+ </div>
+</div>
+<div class="stat-card" style="margin-bottom:20px">
+ <h3>Topic Progress</h3>
+ <div id="topicStats"></div>
+</div>
+
+<div id="content"></div>
     </div>
 
     <script>
@@ -840,6 +878,7 @@
 
             contentDiv.innerHTML = html;
             loadSavedData();
+            updateProgress();
         }
 
         // ---------------- Interactions & Features ----------------
@@ -914,6 +953,7 @@
             const val = selectEl.value;
             selectEl.className = `status-dropdown ${val}`;
             localStorage.setItem(id, val);
+            updateProgress();
         }
 
         function saveComment(id) {
@@ -937,6 +977,74 @@
                 }
             });
         }
+
+        
+        
+function updateAdvancedStats(){
+ const rows=[...document.querySelectorAll('.problem-row')];
+ let done=0,review=0,notDone=0;
+
+ const diffMap={}, topicMap={};
+
+ rows.forEach(r=>{
+   const status=r.querySelector('.status-dropdown').value;
+   const diff=r.dataset.diff;
+   const topic=r.dataset.topic;
+
+   if(status==='done') done++;
+   else if(status==='review') review++;
+   else notDone++;
+
+   diffMap[diff]=diffMap[diff]||{t:0,d:0};
+   diffMap[diff].t++;
+   if(status==='done') diffMap[diff].d++;
+
+   topicMap[topic]=topicMap[topic]||{t:0,d:0};
+   topicMap[topic].t++;
+   if(status==='done') topicMap[topic].d++;
+ });
+
+ const total=rows.length;
+ const pct=total?Math.round(done*100/total):0;
+
+ const circle=document.getElementById('circularProgress');
+ if(circle){
+   circle.style.background=`conic-gradient(#4CAF50 ${pct*3.6}deg,#e0e0e0 0deg)`;
+   document.getElementById('circularText').innerText=pct+'%';
+ }
+
+ const sc=document.getElementById('statusCounts');
+ if(sc) sc.innerHTML=`Done: ${done}<br>Review: ${review}<br>Not Done: ${notDone}`;
+
+ const ds=document.getElementById('difficultyStats');
+ if(ds) ds.innerHTML=Object.entries(diffMap).map(([k,v])=>
+   `${k}: ${v.d}/${v.t} (${Math.round(v.d*100/v.t)}%)`).join('<br>');
+
+ const ts=document.getElementById('topicStats');
+ if(ts) ts.innerHTML=Object.entries(topicMap).map(([k,v])=>`
+   <div class="topic-progress">
+     <div>${k}: ${v.d}/${v.t}</div>
+     <div class="topic-progress-bar"><div class="topic-progress-fill" style="width:${Math.round(v.d*100/v.t)}%"></div></div>
+   </div>`).join('');
+}
+
+function updateProgress() {
+            const statuses = document.querySelectorAll('.status-dropdown');
+            let total = statuses.length;
+            let done = 0;
+
+            statuses.forEach(s => {
+                if (s.value === 'done') done++;
+            });
+
+            const percent = total ? Math.round((done / total) * 100) : 0;
+            const bar = document.getElementById('progressBar');
+            const text = document.getElementById('progressText');
+
+            if (bar) bar.style.width = percent + '%';
+            if (text) text.textContent = `${done}/${total} (${percent}%)`; updateAdvancedStats();
+        }
+
 
         // ---------------- Export / Import Data ----------------
 
