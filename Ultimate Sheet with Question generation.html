@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate DSA Sheet + Tracker</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+            --primary-color: #4CAF50;
+            --hover-color: #f1f1f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .links-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .links-header a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .links-header a:hover {
+            text-decoration: underline;
+        }
+
+        /* NEW: Controls Section Styles */
+        .controls-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .controls-section input, .controls-section select, .controls-section button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .controls-section input { flex-grow: 1; min-width: 200px; }
+        
+        .controls-section button {
+            background-color: #2c3e50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .controls-section button:hover { background-color: #1a252f; }
+
+        .random-box {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 5px solid #2196f3;
+            display: none;
+        }
+
+        /* Modified: Topic Section for Collapsibility */
+        .topic-section {
+            margin-bottom: 40px;
+        }
+
+        .topic-title {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .topic-title:hover { background-color: #34495e; }
+        .topic-title::after { content: '▼'; font-size: 0.8em; }
+        .topic-title.collapsed::after { content: '◀'; }
+        
+        .topic-content { display: block; }
+        .topic-content.collapsed { display: none; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: var(--hover-color);
+        }
+
+        a.problem-link {
+            color: #0366d6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a.problem-link:hover {
+            text-decoration: underline;
+        }
+
+        a.resource-link {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        a.resource-link.discuss {
+            background-color: #f39c12;
+        }
+
+        select.status-dropdown {
+            width: 100%;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            outline: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        select.status-dropdown.not-done { background-color: #ffebee; color: #c62828; }
+        select.status-dropdown.review { background-color: #fff8e1; color: #f57f17; }
+        select.status-dropdown.done { background-color: #e8f5e9; color: #2e7d32; }
+
+        input.comments {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .prompt-btn {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: background 0.3s;
+            width: 100%;
+        }
+        .prompt-btn:hover { background-color: #732d91; }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        .diff-easy { background-color: #00b8a3; }
+        .diff-medium { background-color: #ffc01e; color: #333;}
+        .diff-hard { background-color: #ff375f; }
+        .diff-none { background-color: #7f8c8d; }
+
+        /* NEW: Tutorial Box Styles */
+        .tutorial-box {
+            background-color: #e8f4fd;
+            border-left: 5px solid #3498db;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .tutorial-box summary {
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            color: #2c3e50;
+            user-select: none;
+            outline: none;
+        }
+
+        .tutorial-box summary:hover {
+            color: #3498db;
+        }
+
+        .tutorial-box ul {
+            margin-top: 15px;
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+
+        .tutorial-box li {
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ultimate DSA Sheet + Tracker</h1>
+
+
+        <!-- NEW: Tutorial Section -->
+        <details class="tutorial-box" open>
+            <summary>💡 Welcome! How to use this tracker (Click to collapse/expand)</summary>
+            <ul>
+                <li><strong>Track Progress:</strong> Use the "Status" dropdown to mark problems as Not Done, Review, or Done. Add custom notes in the "Comments" column. Your progress saves automatically to your browser!</li>
+                <li><strong>Search & Filter:</strong> Find specific problems fast using the search bar, or filter by Topic and Difficulty.</li>
+                <li><strong>🎲 Random Question:</strong> Click this to get a random problem. The topic is hidden so you can practice identifying the algorithmic pattern from scratch.</li>
+                <li><strong>🤖 AI Practice:</strong> Click "Gen Prompt" to copy a detailed prompt. Paste it into your preferred local on-device model or web chatbot to test your understanding with a uniquely generated practice question.</li>
+                <li><strong>💾 Backup & Restore:</strong> Use Export/Import Progress to save your data as a file so you don't lose it if you clear your browser history or switch machines.</li>
+            </ul>
+        </details>
+
+
+
+        <div class="controls-section">
+            <input type="text" id="searchInput" placeholder="Search for a problem..." onkeyup="filterProblems()">
+            
+            <select id="topicFilter" onchange="filterProblems()">
+                <option value="All">All Topics</option>
+                </select>
+
+            <select id="difficultyFilter" onchange="filterProblems()">
+                <option value="All">All Difficulties</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+                <option value="None">None</option>
+            </select>
+
+            <button onclick="pickRandom()">🎲 Random Question</button>
+
+            <button onclick="exportData()">💾 Export Progress</button>
+            <button onclick="document.getElementById('importFile').click()">📂 Import Progress</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+        </div>
+
+        <div id="random-question-display" class="random-box"></div>
+
+        <div id="content"></div>
+    </div>
+
+    <script>
+        const dsaData = [
+            {
+                topic: "Arrays",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/two-sum/", extra: "https://www.youtube.com/watch?v=o2WOhGSfx_8" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", extra: "https://www.youtube.com/watch?v=XIWykOHE1SE" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/plus-one/", extra: "https://www.youtube.com/watch?v=FyzWXlSMNoI" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/move-zeroes/", extra: "https://www.youtube.com/watch?v=mgzcjQ1x9Mw" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/", extra: "https://www.youtube.com/watch?v=3gtcRtvDCpA" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/running-sum-of-1d-array/", extra: "https://leetcode.com/problems/running-sum-of-1d-array/discuss/686261/JavaC%2B%2BPython-Array-Time-O(N)-Space-O(1)" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/find-pivot-index/", extra: "https://leetcode.com/problems/find-pivot-index/discuss/411318/Java%3A-beats100-1ms-easy-understanding-solution" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/majority-element/", extra: "https://www.youtube.com/watch?v=PqU48t80rn8" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/fibonacci-number/", extra: "https://www.youtube.com/watch?v=MyFe2W2nIEE&list=PLKZaSt2df1gxtem7J8QqY8m2bHliz8mPt" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/squares-of-a-sorted-array/", extra: "https://leetcode.com/problems/squares-of-a-sorted-array/discuss/495394/C%2B%2B%3A-Simplest-one-pass-two-pointers" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/pascals-triangle/", extra: "https://leetcode.com/problems/pascals-triangle/discuss/38125/Solution-in-Java" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/", extra: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/discuss/11782/Share-my-clean-C%2B%2B-code" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/merge-intervals/", extra: "https://leetcode.com/problems/merge-intervals/discuss/21222/A-simple-Java-solution" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/3sum/", extra: "https://www.youtube.com/watch?v=TeegtfmEhTY" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/product-of-array-except-self/", extra: "https://www.youtube.com/watch?v=3X9-qs1Lwe4" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/insert-delete-getrandom-o1/", extra: "https://leetcode.com/problems/insert-delete-getrandom-o1/discuss/85422/AC-C%2B%2B-Solution.-Unordered_map-%2B-Vector" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/subarray-sum-equals-k/", extra: "https://leetcode.com/problems/subarray-sum-equals-k/discuss/301242/General-summary-of-what-kind-of-problem-can-cannot-solved-by-Two-Pointers" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/next-permutation/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/spiral-matrix/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/container-with-most-water/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/rotate-image/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/word-search/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/3sum-closest/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/game-of-life/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/4sum/", extra: "https://www.youtube.com/watch?v=UG1C-otvF2U" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/find-the-duplicate-number/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/combination-sum/", extra: "https://www.youtube.com/watch?v=yEAHwSS8HN0" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/jump-game-ii/", extra: "https://www.youtube.com/watch?v=1DkVU2i3sOA" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-area-of-a-piece-of-cake-after-horizontal-and-vertical-cuts/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/max-area-of-island/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/find-all-duplicates-in-an-array/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/k-diff-pairs-in-an-array/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/subsets/", extra: "https://www.youtube.com/watch?v=6BPurabdAl4" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/invalid-transactions/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/jump-game/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/subarray-sums-divisible-by-k/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/first-missing-positive/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/largest-rectangle-in-histogram/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/insert-delete-getrandom-o1-duplicates-allowed/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/", extra: "https://www.youtube.com/watch?v=YAWRyWJalM0" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/max-value-of-equation/", extra: "https://www.youtube.com/watch?v=hOTpn8jE9jI" }
+                ]
+            },
+            {
+                topic: "Recursion",
+                problems: [
+                    { diff: "None", link: "https://youtu.be/LgaFY8WyTX8", extra: "", titleOverride: "1- What is recursion" },
+                    { diff: "None", link: "https://youtu.be/dWsQroffE-U", extra: "", titleOverride: "2- How Recursion Works" },
+                    { diff: "None", link: "https://youtu.be/2l3cSfE885g", extra: "", titleOverride: "3- What is a recursion tree" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/powx-n/", extra: "https://youtu.be/an9WRz8QhkA" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/valid-palindrome/", extra: "https://youtu.be/m5Cx_AQnpfE" },
+                    { diff: "None", link: "https://youtu.be/quqHd8UHbzs", extra: "", titleOverride: "6- General Steps to recursion problems" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/subsets/", extra: "https://youtu.be/0N3RCWa8jFM" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/permutations/", extra: "https://youtu.be/jRyQVVvYBAM" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/permutations-ii/", extra: "https://youtu.be/lQaNrfA86B0" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/subsets-ii/", extra: "https://youtu.be/u40eYbmT9zg" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/combinations/", extra: "https://youtu.be/DTFy9spEQGo" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/combination-sum/", extra: "https://youtu.be/Hca7284gCpI" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/combination-sum-ii/", extra: "https://youtu.be/6fARitpO0p8" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/combination-sum-iii/", extra: "https://youtu.be/xNeLP5RDY-c" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/letter-combinations-of-a-phone-number/", extra: "https://youtu.be/qyHlIdxk820" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/partition-to-k-equal-sum-subsets/", extra: "https://youtu.be/h_6MldQ8vB8" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/", extra: "https://youtu.be/DIJQ8zLeVEk" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/flood-fill/", extra: "https://youtu.be/RjO-HDjRMpM" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/word-search/", extra: "https://youtu.be/hPyR1un7_hw" },
+                    { diff: "Medium", link: "https://youtu.be/XiJ0Qq1LD5g", extra: "", titleOverride: "20- Rat in a Maze" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/n-queens/", extra: "https://youtu.be/VrySrTVAI3YD" }
+                ]
+            },
+            {
+                topic: "Dynamic Programming",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/maximum-subarray/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/climbing-stairs", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/divisor-game/", extra: "https://www.youtube.com/watch?v=UbE4-ONpJcc" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/counting-bits/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/decode-ways/", extra: "https://www.youtube.com/watch?v=N5i7ySYQcgM" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/word-break/", extra: "https://www.youtube.com/watch?v=_iIK7Gu7MNo" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/delete-and-earn/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximal-square/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/coin-change/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-product-subarray/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-length-of-repeated-subarray/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/palindromic-substrings/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/house-robber/", extra: "https://www.youtube.com/watch?v=8BdXDakKZEs" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/continuous-subarray-sum/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/knight-dialer/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/longest-increasing-subsequence/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/unique-paths/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/count-square-submatrices-with-all-ones/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/range-sum-query-2d-immutable/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/longest-arithmetic-subsequence/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/trapping-rain-water/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/word-break-ii/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/regular-expression-matching/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/maximal-rectangle/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/longest-valid-parentheses/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/edit-distance/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/frog-jump/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/", extra: "https://www.youtube.com/watch?v=mFwf1YbH-Jk" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/burst-balloons/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-cost-to-merge-stones/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/super-egg-drop/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/count-different-palindromic-subsequences/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-cost-to-cut-a-stick/", extra: "" }
+                ]
+            },
+            {
+                topic: "Strings",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/add-strings/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/longest-common-prefix/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/valid-palindrome-ii/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/roman-to-integer/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/implement-strstr/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/longest-substring-without-repeating-characters/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/longest-palindromic-substring/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/group-anagrams/", extra: "https://www.youtube.com/watch?v=NVIm5_TIqUs" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/generate-parentheses/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/basic-calculator-ii/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/integer-to-roman/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/reverse-words-in-a-string/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/simplify-path/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/zigzag-conversion/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/text-justification/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/integer-to-english-words/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-window-substring/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/valid-number/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/distinct-subsequences/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/substring-with-concatenation-of-all-words/", extra: "" }
+                ]
+            },
+            {
+                topic: "Maths",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/reverse-integer/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/add-binary/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/palindrome-number/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/minimum-moves-to-equal-array-elements/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/happy-number/", extra: "https://www.youtube.com/watch?v=ocDwEjRVDAk" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/excel-sheet-column-title/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/missing-number/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/maximum-product-of-three-numbers/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/power-of-two/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/encode-and-decode-tinyurl/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/string-to-integer-atoi/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/multiply-strings/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/angle-between-hands-of-a-clock/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/integer-break/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/valid-square/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/the-kth-factor-of-n/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/basic-calculator/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/max-points-on-a-line/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/permutation-sequence/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/number-of-digit-one/", extra: "" }
+                ]
+            },
+            {
+                topic: "Greedy",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/task-scheduler/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/gas-station/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/minimum-deletion-cost-to-avoid-repeating-letters/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/minimum-deletions-to-make-character-frequencies-unique/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/remove-k-digits/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/non-overlapping-intervals/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/candy/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-number-of-taps-to-open-to-water-a-garden/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/create-maximum-number/", extra: "" }
+                ]
+            },
+            {
+                topic: "DFS",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/letter-combinations-of-a-phone-number/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/course-schedule-ii/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/decode-string/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/number-of-provinces/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/clone-graph/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/shortest-bridge/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/all-paths-from-source-to-target/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/surrounded-regions/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/house-robber-iii/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/critical-connections-in-a-network/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/remove-invalid-parentheses/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/concatenated-words/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/making-a-large-island/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/contain-virus/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/24-game/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/remove-boxes/", extra: "" }
+                ]
+            },
+            {
+                topic: "Trees",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/diameter-of-binary-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/invert-binary-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/subtree-of-another-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/range-sum-of-bst/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/symmetric-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/merge-two-binary-trees/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/maximum-depth-of-binary-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/binary-tree-paths/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/same-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/path-sum/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/minimum-absolute-difference-in-bst/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/sum-of-left-leaves/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/balanced-binary-tree/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/binary-tree-inorder-traversal/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/count-good-nodes-in-binary-tree/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/binary-tree-right-side-view/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/validate-binary-search-tree/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/binary-search-tree-iterator/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/binary-tree-level-order-traversal/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/path-sum-iii/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/unique-binary-search-trees/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/recover-binary-search-tree/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/populating-next-right-pointers-in-each-node/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-width-of-binary-tree/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/unique-binary-search-trees-ii/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/redundant-connection/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/binary-tree-maximum-path-sum/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/binary-tree-cameras/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/sum-of-distances-in-tree/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/number-of-ways-to-reconstruct-a-tree/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/redundant-connection-ii/", extra: "" }
+                ]
+            },
+            {
+                topic: "Hash Table",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/verifying-an-alien-dictionary/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/design-hashmap/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/top-k-frequent-elements/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/design-twitter/", extra: "" }
+                ]
+            },
+            {
+                topic: "Binary Search",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/sqrtx/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/binary-search/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/peak-index-in-a-mountain-array/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/time-based-key-value-store/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/search-in-rotated-sorted-array/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/powx-n/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/find-peak-element/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/search-a-2d-matrix/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/divide-two-integers/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/minimum-limit-of-balls-in-a-bag/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/median-of-two-sorted-arrays/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/count-of-smaller-numbers-after-self/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/split-array-largest-sum/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/", extra: "" }
+                ]
+            },
+            {
+                topic: "BFS",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/number-of-islands/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/rotting-oranges/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/snakes-and-ladders/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/is-graph-bipartite/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/minimum-jumps-to-reach-home/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/word-ladder/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/word-ladder-ii/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/cut-off-trees-for-golf-event/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/reachable-nodes-in-subdivided-graph/", extra: "" }
+                ]
+            },
+            {
+                topic: "Two Pointer",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/partition-labels/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/sort-colors/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/longest-repeating-character-replacement/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/maximum-number-of-visible-points/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/subarrays-with-k-different-integers/", extra: "" }
+                ]
+            },
+            {
+                topic: "Stack",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/min-stack/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/next-greater-element-i/", extra: "https://www.youtube.com/watch?v=TunTV2-griM" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/backspace-string-compare/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/implement-queue-using-stacks/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/implement-stack-using-queues/", extra: "https://www.youtube.com/watch?v=B9bSSOnc0CQ" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/daily-temperatures/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/flatten-nested-list-iterator/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/online-stock-span/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/sum-of-subarray-minimums/", extra: "https://www.youtube.com/watch?v=9-TXIVEXX2w" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/evaluate-reverse-polish-notation/", extra: "" }
+                ]
+            },
+            {
+                topic: "Design",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/lru-cache/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/find-median-from-data-stream/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/design-underground-system/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/lfu-cache/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/tweet-counts-per-frequency/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/all-oone-data-structure/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/design-browser-history/", extra: "" }
+                ]
+            },
+            {
+                topic: "Graph",
+                problems: [
+                    { diff: "Easy", link: "https://leetcode.com/problems/employee-importance/", extra: "" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/find-the-town-judge/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/evaluate-division/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/accounts-merge/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/network-delay-time/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/find-eventual-safe-states/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/keys-and-rooms/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/possible-bipartition/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/regions-cut-by-slashes/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/satisfiability-of-equality-equations/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/as-far-from-land-as-possible/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/number-of-closed-islands/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/number-of-operations-to-make-network-connected/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/time-needed-to-inform-all-employees/", extra: "" }
+                ]
+            },
+            {
+                topic: "Bit Manipulation",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/sum-of-two-integers/discuss/84278/A-summary%3A-how-to-use-bit-manipulation-to-solve-problems-easily-and-efficiently", extra: "", titleOverride: "Sum of Two Integers" }
+                ]
+            },
+            {
+                topic: "Linked List",
+                problems: [
+                    { diff: "None", link: "https://youtu.be/fxuVD1e66QA", extra: "", titleOverride: "1- Uses of Linked List ( Real Life )" },
+                    { diff: "None", link: "https://youtu.be/Xtvo7Y2q4NA", extra: "", titleOverride: "2- Representation of Linked List" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/delete-node-in-a-linked-list/", extra: "https://youtu.be/m6rUsGNRYPg" },
+                    { diff: "None", link: "https://youtu.be/KMc-B051ne8", extra: "", titleOverride: "4- Arrays vs Linked List" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/middle-of-the-linked-list/", extra: "https://youtu.be/5blSG0JZNbg" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/", extra: "https://youtu.be/rPbzUW7usJE" },
+                    { diff: "None", link: "https://youtu.be/cTm0AR5_O54", extra: "", titleOverride: "7- Doubly Linked List and STLs" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/design-hashset/", extra: "https://youtu.be/IjxkD8L2cOM" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/design-hashmap/", extra: "https://youtu.be/xVEGczCJCHs" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/reverse-linked-list/", extra: "https://youtu.be/MsIRa740mQY" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/reverse-nodes-in-k-group/", extra: "https://youtu.be/TeDcLjOOiK4", titleOverride: "Reverse Nodes in k-Group" },
+                    { diff: "Hard", link: "https://youtu.be/dbRJFnQoKTI", extra: "", titleOverride: "Reverse Nodes in k-Group (NO EXTRA SPACE)" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/merge-two-sorted-lists/", extra: "https://youtu.be/0QPpgAsd4IY" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/merge-k-sorted-lists/", extra: "https://youtu.be/RYJ3vs8qx10" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/remove-duplicates-from-sorted-list/", extra: "https://youtu.be/_Dc1IqY2WpQ" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/linked-list-cycle/", extra: "https://youtu.be/nbQUEN3IRFk" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/linked-list-cycle-ii/", extra: "https://youtu.be/tsQT0MT73Og" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/intersection-of-two-linked-lists/", extra: "https://youtu.be/DGEqY5rLyVc" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/palindrome-linked-list/", extra: "https://youtu.be/XYY2tc_8KDM" },
+                    { diff: "Easy", link: "https://leetcode.com/problems/remove-linked-list-elements/", extra: "https://youtu.be/JrRoR7ycM8U" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/design-browser-history/", extra: "https://youtu.be/SPDhPuMsM9A" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/lru-cache/", extra: "https://youtu.be/nN36SSIMn1k" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/copy-list-with-random-pointer/", extra: "https://youtu.be/ctFmFbeyTVU", titleOverride: "Copy List with Random Pointer ( with extra space )" },
+                    { diff: "Medium", link: "https://youtu.be/uBjpRedaNKQ", extra: "", titleOverride: "Copy List with Random Pointer ( NO extra space )" }
+                ]
+            },
+            {
+                topic: "Heap",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/k-closest-points-to-origin/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/kth-largest-element-in-an-array/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/reorganize-string/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/furthest-building-you-can-reach/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/cheapest-flights-within-k-stops/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/find-the-most-competitive-subsequence/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/ugly-number-ii/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/merge-k-sorted-lists/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/sliding-window-maximum/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/the-skyline-problem/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/trapping-rain-water-ii/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-number-of-refueling-stops/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/swim-in-rising-water/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/shortest-path-to-get-all-keys/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/minimum-cost-to-hire-k-workers/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/k-th-smallest-prime-fraction/", extra: "" }
+                ]
+            },
+            {
+                topic: "Sliding Window",
+                problems: [
+                    { diff: "Medium", link: "https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/max-consecutive-ones-iii/", extra: "" },
+                    { diff: "Medium", link: "https://leetcode.com/problems/grumpy-bookstore-owner/", extra: "" },
+                    { diff: "Hard", link: "https://leetcode.com/problems/sliding-window-median/", extra: "" }
+                ]
+            },
+            {
+                topic: "Trie & Segment Tree",
+                problems: [
+                    { diff: "None", link: "https://leetcode.com/explore/learn/card/trie/", extra: "", titleOverride: "Trie Card" },
+                    { diff: "Hard", link: "https://leetcode.com/articles/a-recursive-approach-to-segment-trees-range-sum-queries-lazy-propagation/", extra: "", titleOverride: "Recursive Approach to Segment Trees" }
+                ]
+            }
+        ];
+
+        // ---------------- Helpers ----------------
+        function getProblemName(url, titleOverride) {
+            if (titleOverride) return titleOverride;
+            let parts = url.split('/');
+            let namePart = parts.includes("problems") ? parts[parts.indexOf("problems") + 1] : parts[parts.length - 2];
+            if(!namePart || namePart === "") {
+                if(url.includes("youtu.be")) return "YouTube Video Link";
+                return "Link";
+            }
+            return namePart.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+
+        function getBadgeClass(diff) {
+            if(diff.toLowerCase() === 'easy') return 'diff-easy';
+            if(diff.toLowerCase() === 'medium') return 'diff-medium';
+            if(diff.toLowerCase() === 'hard') return 'diff-hard';
+            return 'diff-none';
+        }
+
+        // ---------------- Core Rendering ----------------
+        function populateTopicDropdown() {
+            let topicSelect = document.getElementById('topicFilter');
+            dsaData.forEach(section => {
+                let opt = document.createElement('option');
+                opt.value = section.topic;
+                opt.innerHTML = section.topic;
+                topicSelect.appendChild(opt);
+            });
+        }
+
+        function renderTracker() {
+            populateTopicDropdown();
+            const contentDiv = document.getElementById('content');
+            let html = '';
+
+            dsaData.forEach((section, sIndex) => {
+                html += `
+                <div class="topic-section" id="section_${sIndex}">
+                    <div class="topic-title" onclick="toggleSection(this)">${section.topic}</div>
+                    <div class="topic-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 10%">Difficulty</th>
+                                    <th style="width: 30%">Problem Link</th>
+                                    <th style="width: 15%">Solution / Resource</th>
+                                    <th style="width: 10%">Status</th>
+                                    <th style="width: 15%">Comments</th>
+                                    <th style="width: 15%">AI Practice</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                section.problems.forEach((prob, pIndex) => {
+                    const uniqueId = `status_${sIndex}_${pIndex}`;
+                    const commentId = `comment_${sIndex}_${pIndex}`;
+                    
+                    let extraLink = '';
+                    if(prob.extra) {
+                        let isDiscuss = prob.extra.includes("discuss");
+                        let btnClass = isDiscuss ? "resource-link discuss" : "resource-link";
+                        let btnText = isDiscuss ? "Discuss Post" : "YouTube Video";
+                        extraLink = `<a href="${prob.extra}" target="_blank" class="${btnClass}">${btnText}</a>`;
+                    }
+
+                    let diffDisplay = prob.diff !== "None" ? prob.diff : "-";
+                    let searchableName = getProblemName(prob.link, prob.titleOverride).toLowerCase();
+
+                    html += `
+                                <tr class="problem-row" data-topic="${section.topic}" data-diff="${prob.diff}" data-search="${searchableName.toLowerCase()}">
+                                    <td>${pIndex + 1}</td>
+                                    <td><span class="difficulty-badge ${getBadgeClass(prob.diff)}">${diffDisplay}</span></td>
+                                    <td><a href="${prob.link}" target="_blank" class="problem-link">${getProblemName(prob.link, prob.titleOverride)}</a></td>
+                                    <td>${extraLink}</td>
+                                    <td>
+                                        <select class="status-dropdown not-done" id="${uniqueId}" onchange="updateStatus('${uniqueId}')">
+                                            <option value="not-done">Not Done</option>
+                                            <option value="review">Review</option>
+                                            <option value="done">Done</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="comments" id="${commentId}" placeholder="Add notes..." onkeyup="saveComment('${commentId}')">
+                                    </td>
+                                    <td>
+                                        <button class="prompt-btn" onclick="copyPrompt('${searchableName.replace(/'/g, "\\'")}', '${section.topic}', '${prob.diff}')">🤖 Gen Prompt</button>
+                                    </td>
+                                </tr>
+                    `;
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                `;
+            });
+
+            contentDiv.innerHTML = html;
+            loadSavedData();
+        }
+
+        // ---------------- Interactions & Features ----------------
+        
+        function toggleSection(element) {
+            element.classList.toggle('collapsed');
+            let content = element.nextElementSibling;
+            content.classList.toggle('collapsed');
+        }
+
+        function filterProblems() {
+            let searchText = document.getElementById('searchInput').value.toLowerCase();
+            let topicText = document.getElementById('topicFilter').value;
+            let diffText = document.getElementById('difficultyFilter').value;
+
+            document.querySelectorAll('.topic-section').forEach(section => {
+                let hasVisible = false;
+                
+                section.querySelectorAll('.problem-row').forEach(row => {
+                    let matchesSearch = row.dataset.search.includes(searchText);
+                    let matchesTopic = (topicText === 'All' || row.dataset.topic === topicText);
+                    let matchesDiff = (diffText === 'All' || row.dataset.diff === diffText);
+
+                    if (matchesSearch && matchesTopic && matchesDiff) {
+                        row.style.display = '';
+                        hasVisible = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Hide the whole topic section if all its rows are filtered out
+                section.style.display = hasVisible ? 'block' : 'none';
+            });
+        }
+
+        function pickRandom() {
+            let allProblems = [];
+            dsaData.forEach((section) => {
+                section.problems.forEach((prob) => {
+                    allProblems.push(prob);
+                });
+            });
+
+            let rand = allProblems[Math.floor(Math.random() * allProblems.length)];
+            let display = document.getElementById('random-question-display');
+            let probName = getProblemName(rand.link, rand.titleOverride);
+            let badge = `<span class="difficulty-badge ${getBadgeClass(rand.diff)}">${rand.diff !== "None" ? rand.diff : "-"}</span>`;
+            
+            let extraLink = '';
+            if(rand.extra) {
+                let isDiscuss = rand.extra.includes("discuss");
+                let btnClass = isDiscuss ? "resource-link discuss" : "resource-link";
+                let btnText = isDiscuss ? "Discuss Post" : "YouTube Video";
+                extraLink = `<a href="${rand.extra}" target="_blank" class="${btnClass}">${btnText}</a>`;
+            }
+
+            display.innerHTML = `
+                <h3 style="margin-top:0; color: #2c3e50;">🎲 Random Challenge Selected!</h3>
+                <p><strong>Difficulty:</strong> ${badge}</p>
+                <p style="font-size: 1.1em;"><strong>Problem:</strong> <a href="${rand.link}" target="_blank" class="problem-link">${probName}</a></p>
+                ${extraLink ? `<p><strong>Resource:</strong> ${extraLink}</p>` : ''}
+                <p style="font-size: 0.85em; margin-top: 15px; color: #666;"><em>(The topic is hidden so you can practice identifying the pattern!)</em></p>
+            `;
+            display.style.display = 'block';
+        }
+
+        // ---------------- Local Storage Data ----------------
+        
+        function updateStatus(id) {
+            const selectEl = document.getElementById(id);
+            const val = selectEl.value;
+            selectEl.className = `status-dropdown ${val}`;
+            localStorage.setItem(id, val);
+        }
+
+        function saveComment(id) {
+            const commentEl = document.getElementById(id);
+            localStorage.setItem(id, commentEl.value);
+        }
+
+        function loadSavedData() {
+            document.querySelectorAll('.status-dropdown').forEach(select => {
+                const saved = localStorage.getItem(select.id);
+                if (saved) {
+                    select.value = saved;
+                    select.className = `status-dropdown ${saved}`;
+                }
+            });
+
+            document.querySelectorAll('.comments').forEach(input => {
+                const saved = localStorage.getItem(input.id);
+                if (saved) {
+                    input.value = saved;
+                }
+            });
+        }
+
+        // ---------------- Export / Import Data ----------------
+
+        function exportData() {
+            const data = {};
+            // Gather only tracker-specific data from localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('status_') || key.startsWith('comment_')) {
+                    data[key] = localStorage.getItem(key);
+                }
+            }
+
+            // Convert to JSON and trigger download
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "dsa-tracker-progress.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    // Load the imported data into localStorage
+                    for (const key in data) {
+                        if (key.startsWith('status_') || key.startsWith('comment_')) {
+                            localStorage.setItem(key, data[key]);
+                        }
+                    }
+                    loadSavedData(); // Refresh the UI
+                    alert("Progress imported successfully!");
+                } catch (err) {
+                    alert("Error parsing the file. Please ensure it is a valid JSON export.");
+                }
+            };
+            reader.readAsText(file);
+            // Reset input so the same file can be imported again if needed
+            event.target.value = "";
+        }
+
+        // ---------------- AI Prompt Generator ----------------
+
+        function copyPrompt(problemName, topic, diff) {
+            const promptText = `Act as an expert Data Structures and Algorithms tutor. I want to test my understanding of the core algorithmic pattern used in the problem "${problemName}" (Topic: ${topic}).
+
+Here is how we will proceed:
+STEP 1: You must first ask me what difficulty level (Easy, Medium, or Hard) I want the practice question to be. Do NOT generate the question yet. STOP and wait for my reply.
+STEP 2: Once I reply with the difficulty, generate a completely new, unique coding problem testing the EXACT same underlying logic as "${problemName}".
+
+When generating the question in Step 2, please ensure you:
+- Provide a creative, real-world scenario.
+- List explicit Input and Output constraints.
+- Provide 2 test cases with clear explanations of how the output is derived.
+- DO NOT provide the code solution immediately. Instead, provide 3 conceptual hints that I can use if I get stuck.`;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert(`Interactive prompt for "${problemName}" copied to your clipboard!\n\nJust paste it into your AI model. It will ask you for the difficulty before generating the question.`);
+            }).catch(err => {
+                alert('Failed to copy prompt. Your browser might be blocking clipboard access.');
+                console.error(err);
+            });
+        }
+
+
+        // Initialize
+        window.onload = renderTracker;
+    </script>
+</body>
+</html>
